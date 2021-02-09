@@ -5,7 +5,7 @@
 #import libraries
 import sys
 
-#constants
+#globals
 START = 0
 STOP = 0
 
@@ -30,7 +30,14 @@ def commandLineArgValidation():
 
     return None
 
+def summer(start,stop):
+    return None
+
 def main():
-    commandLineArgValidation()
+    output=commandLineArgValidation()
+    if(output==None):
+        print(START,STOP)
+    else:
+        print(output)
 
 main()
