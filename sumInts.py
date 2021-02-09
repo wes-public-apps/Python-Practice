@@ -15,7 +15,7 @@ def commandLineArgValidation():
 
     #check for two arguments
     if(len(sys.argv)!=3):
-        return "Error: Only provide two arguments."
+        return "Error: Provide exacly two arguments."
 
     #validate arg type
     try:
@@ -32,15 +32,17 @@ def commandLineArgValidation():
 
     return None
 
+#sum a range of numbers
 def summer(start,stop):
-    return None
+    return sum(range(start,stop+1))
 
+#run function
 def main():
     global START,STOP
     
     output=commandLineArgValidation()
     if(output==None):
-        print(START,STOP)
+        print("Start: "+str(START),"Stop: "+str(STOP),"Sum: "+str(summer(START,STOP)))
     else:
         print(output)
 

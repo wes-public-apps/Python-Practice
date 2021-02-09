@@ -18,9 +18,9 @@ class TestSumInts(unittest.TestCase):
     def test_arg_validation(self):
         #number of args
         sys.argv = ['test.py']
-        self.assertEqual(si.commandLineArgValidation(),"Error: Only provide two arguments.", "Failed to catch too few args.")
+        self.assertEqual(si.commandLineArgValidation(),"Error: Provide exacly two arguments.", "Failed to catch too few args.")
         sys.argv = ['test.py',1,2,3]
-        self.assertEqual(si.commandLineArgValidation(),"Error: Only provide two arguments.", "Failed to catch too many args.")
+        self.assertEqual(si.commandLineArgValidation(),"Error: Provide exacly two arguments.", "Failed to catch too many args.")
         #invalid types
         sys.argv = ['test.py','a','2']
         self.assertEqual(si.commandLineArgValidation(),"Error: The provided arguments are not integers.", "Failed to catch invalid type.")
