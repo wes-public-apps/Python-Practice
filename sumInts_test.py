@@ -39,7 +39,8 @@ class TestSumInts(unittest.TestCase):
 
     #test range summer
     def test_range_sum(self):
-        self.assertTrue(True)
+        self.assertEqual(si.summer(1,1),1,"Did not handle start and stop being the same.")
+        self.assertEqual(si.summer(1,3),6,"Should be 6")
 
 if __name__ == '__main__':
     unittest.main()
