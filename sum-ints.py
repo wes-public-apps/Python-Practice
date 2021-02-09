@@ -11,6 +11,8 @@ STOP = 0
 
 #validate command line args
 def commandLineArgValidation():
+    global START,STOP
+
     #check for two arguments
     if(len(sys.argv)!=3):
         return "Error: Only provide two arguments."
@@ -34,6 +36,8 @@ def summer(start,stop):
     return None
 
 def main():
+    global START,STOP
+    
     output=commandLineArgValidation()
     if(output==None):
         print(START,STOP)
