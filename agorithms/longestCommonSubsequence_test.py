@@ -11,9 +11,13 @@ class TestLongestCommonSubsequence(unittest.TestCase):
     def test_LongestCommonSequenceBrute(self):
         self.assertTrue(True)
 
-    def test_listAllSubstrings(self):
-        self.assertTrue(True)
+    #test method for listing all substrings
+    def test_listAllSubstringsBruteForce(self):
+        self.assertEqual(lcs.listAllSubstringsBruteForce("CKBE"),['C', 'K', 'B', 'E', 'CK', 'CB', 'CE', 'KB', 'KE', 'BE', 'CKB', 'CKE', 'CBE', 'KBE', 'CKBE'])
+        self.assertEqual(lcs.listAllSubstringsBruteForce("ABCD"),['A', 'B', 'C', 'D', 'AB', 'AC', 'AD', 'BC', 'BD', 'CD', 'ABC', 'ABD', 'ACD', 'BCD', 'ABCD'])
+        self.assertEqual(lcs.listAllSubstringsBruteForce("DAB"),['D', 'A', 'B','DA', 'DB', 'AB', 'DAB'])
 
+    #test method for getting next substrings
     def test_getNextSubstring(self):
         base="CKBE"
         state=[-1]
