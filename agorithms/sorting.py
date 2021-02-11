@@ -10,36 +10,28 @@ def quicksort(arr):
 #private quicksort helper
 def __quickSort(arr,low,high):
     #handle edge cases
-    if(high-low<2): return arr
+    if(high-low<1): return arr
 
     pivotVal=arr[high]
-    start=low
-    end=high-1
+    pivotInd=high
 
     #arrange values arround the pivot point
-    while(start<end):
-        #move small values to end and larger values to front
-        if arr[start]>pivotVal:
-            while(start<end and arr[end]>pivotVal): 
-                end-=1
-        elif arr[start]<pivotVal:
-            while(start<end and arr[end]<pivotVal): 
-                end-=1
-        #swap start and end values
-        temp = arr[start]
-        arr[start]=arr[end]
-        arr[end]=temp
-
-        #increment start position
-        start+=1
-
-    #relocate pivot value
-    pivotInd = start if arr[start]>pivotVal else start+1
-    del arr[high]
-    arr.insert(pivotInd,pivotVal)
+    currPos=0
+    while(currPos<pivotInd):
+        if(arr[currPos]>pivotVal):
+            arr.insert(pivotInd+1,arr[currPos])
+            del arr[currPos]
+            pivotInd-=1
+        else:
+            currPos+=1
 
     #quick sort both sides of pivot
     __quickSort(arr,low,pivotInd-1)
     __quickSort(arr,pivotInd+1,high)
 
     return arr
+
+def __swap(arr,ind1,ind2):
+    temp = arr[ind1]
+    arr[ind1]=arr[ind2]
+    arr[ind2]=temp
