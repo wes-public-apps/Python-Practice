@@ -22,8 +22,12 @@ def insertInOrder(arr,val):
 #O(log2n)
 def insertInOrderBinary(arr,val):
     #handle edge cases
-    if(arr==None): return [val]
-    if(arr==[]): return [val]
+    if(arr==None): 
+        arr=[val]
+        return arr
+    if(arr==[]):
+        arr.append(val) 
+        return arr
 
     #handle normal cases
     arrLen=len(arr)
