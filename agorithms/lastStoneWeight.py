@@ -6,8 +6,8 @@
 # Each turn, two of the heaviest rocks in a collection are smashed. The difference is kept to form a new rock.
 # Determine the size of the last rock.
 
-import math
 import sorting as Sort
+import inserting as Insert
 
 def determineSizeOfLastRock(weights):
     #we need to get a list 
@@ -16,7 +16,8 @@ def determineSizeOfLastRock(weights):
         #each iteration smash rocks and add remainder rock to collection in correct order
     
     #validate list
-    weights = filter(validateInput,weights)
+    if weights==None or weights==[]: return 0
+    weights=list(filter(validateInput,weights))
 
     #sort list
     numRocks = len(weights)
@@ -24,14 +25,14 @@ def determineSizeOfLastRock(weights):
 
     #loop until weights are down to one entry
     while(numRocks>1):
-        newRock=math.abs(weights[numRocks-1]-weights[numRocks-2])
+        newRock=abs(weights[numRocks-1]-weights[numRocks-2])
 
         del weights[numRocks-1]
         del weights[numRocks-2]
         numRocks-=2
 
         if newRock>0:
-            insertInOrder(weights,newRock)
+            Insert.insertInOrderBinary(weights,newRock)
             numRocks+=1
     
     #handle perfect cancellation case
@@ -40,29 +41,10 @@ def determineSizeOfLastRock(weights):
     else:
         return weights[0]
 
-#insert value into array in order            
-def insertInOrder(arr,val):
-    arrLen=len(arr)
-    start=0
-    end=arrLen
-
-    while((end-start)>1):
-        midPoint=(end-start)//2
-
-        #exit if val is equal to array value in question
-        if(arr[midPoint]==val):
-            arr.insert(midPoint,val)
-            break
-        
-        #determine array section to check next
-        if(arr[midPoint]<val):
-            start=midPoint
-        else:
-            end=midPoint
-
 #validate input
 def validateInput(weight):
     try:
         int(weight)
     except TypeError:
-        pass
+        return False
+    return True
