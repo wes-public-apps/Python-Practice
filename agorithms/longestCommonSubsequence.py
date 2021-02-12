@@ -3,6 +3,57 @@
 # This file use multiple different algorithms to determine the longest common
 # subsequence between two strings
 
+#use dynamic programming to determine longest common subsequence
+def longestCommonSubsequenceDynamic(str1,str2):
+    if len(str1)==0 or len(str2)==0: return None
+
+    longestSubs=[]
+
+    #track position of matching letters
+    str1Pos=[]
+    str2Pos=[]
+    numMatch=0
+
+    #build list of matching letters
+    for i in range(len(str1)):
+        for j in range(len(str2)):
+            if str1[i]==str2[j]: 
+                str1Pos.append(i)
+                str2Pos.append(j)
+                numMatch+=1
+    
+    #no matching letters
+    if len(str1Pos)==0: return None
+
+    #create list of longest matching substring
+    subStrLen=0
+    currentStrLen=numMatch
+    for j in range(numMatch):
+        #create a single matching substring from matching letter list
+        maxStr1Pos=0
+        maxStr2Pos=0
+        subStr=''
+        for i in range(j,numMatch):
+            #current matching letter is further down the strings than previous match
+            #add to substring
+            if str1Pos[i]>maxStr1Pos and str2Pos[i]>maxStr2Pos:
+                subStr+=str1[str1Pos[i]]
+                maxStr1Pos=str1Pos[i]
+                maxStr2Pos=str2Pos[i]
+                subStrLen+=1
+        
+        #be able to terminate program when next found common subsequence is short than the previous one
+        #must keep list if there are multiple of the same size
+        if currentStrLen<subStrLen:
+            break
+        else:
+            currentStrLen=subStrLen
+
+        longestSubs.append(subStr)
+
+    return longestSubs
+
+
 #use recursion to determine longest common subsequence
 def longestCommonSubsequenceRecursion(str1,str2):
     #base case. str is an empty str
