@@ -10,6 +10,33 @@ import math
 
 class TestLongestCommonSubsequence(unittest.TestCase):
 
+    #This method is for testing my custom, memory efficient dynamic programming algorithm
+    def test_LongestCommonSequenceEfficDynamic(self):
+        #edge cases
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("",""),None)
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("abc","defgh"),None)
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("hfsdui","hfsdui"),["hfsdui"])
+        
+        #normal cases
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("hfsdui","hfsduiksae"),["hfsdui"])
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("kjsdhfse","jaukadfj").sort(),['jdf','kdf'].sort())
+
+        #compare with brute force
+        for i in range(1,4,100):
+            str1=''
+            str2=''
+            for _ in range(i):
+                str1+=random.choice(string.ascii_letters)
+                str2+=random.choice(string.ascii_letters)
+            
+            commonStrsBrute=lcs.longestCommonSubsequenceBrute(str1,str2)
+            commonStrsDynam=lcs.longestCommonSubsequenceDynamic(str1,str2)
+
+            if commonStrsDynam==None or commonStrsBrute==None:
+                self.assertEqual(commonStrsBrute,commonStrsDynam)
+            else:
+                self.assertEqual(commonStrsBrute.sort(),commonStrsDynam.sort())
+
     #This method is for testing longest common subsequence recursive algorithm
     def test_LongestCommonSequenceRecursion(self):
         #edge cases
@@ -30,7 +57,7 @@ class TestLongestCommonSubsequence(unittest.TestCase):
                 str2+=random.choice(string.ascii_letters)
             commonStrLenDynamic=lcs.longestCommonSubsequenceRecursion(str1,str2)
             commonStrs=lcs.longestCommonSubsequenceBrute(str1,str2)
-            commonStrLenBrute=len(commonStrs[-1]) if commonStrs!=None else 0
+            commonStrLenBrute=len(commonStrs[0]) if commonStrs!=None else 0
             self.assertEqual(commonStrLenDynamic,commonStrLenBrute)
 
 
