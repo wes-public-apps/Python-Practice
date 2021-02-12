@@ -5,7 +5,43 @@
 
 #brute force algorithm for longest common sequence
 def longestCommonSubsequenceBrute(str1,str2):
-    pass
+    longestSubs = []
+
+    str1Len=len(str1)
+    str2Len=len(str2)
+
+    #determine the longest possible matching substring
+    maxLen = str1Len if str1Len<str2Len else str2Len
+    subStrLen = maxLen #start searching longest substrings first
+    
+    ##loop over all substrings in str1
+    subStr1 = ''
+    state1=list(range(subStrLen))
+    state1[-1]-=1
+    while(subStrLen>0 or subStr1!=None):
+        subStr1=getNextSubstring(str1,str1Len,subStrLen,state1)
+
+        #decrement substring len when all substring of len have been tested
+        if subStr1==None: 
+            subStrLen-=1
+            if len(longestSubs)>0: return longestSubs
+            if subStrLen<=0: break
+            state1=list(range(subStrLen))
+            state1[-1]-=1
+            continue
+
+        #loop over all equal length substrings in str2
+        subStr2 =''
+        state2=list(range(subStrLen))
+        state2[-1]-=1
+        while True:
+            subStr2=getNextSubstring(str2,str2Len,subStrLen,state2)
+            if subStr2==None: break
+            
+            #record matching substrings
+            if subStr1==subStr2:
+                longestSubs.append(subStr1)
+    return None
 
 #List all possible substrings for a given base string
 def listAllSubstringsBruteForce(base):
