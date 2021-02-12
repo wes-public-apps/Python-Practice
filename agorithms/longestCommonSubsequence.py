@@ -3,14 +3,14 @@
 # This file use multiple different algorithms to determine the longest common
 # subsequence between two strings
 
-#use dynamic programming to determine longest common subsequence
-def longestCommonSubsequenceDynamicProgramming(str1,str2):
+#use recursion to determine longest common subsequence
+def longestCommonSubsequenceRecursion(str1,str2):
     #base case. str is an empty str
     if len(str1)==0 or len(str2)==0: return 0
 
     #normal case
-    if str1[-1]==str2[-1]: return 1+longestCommonSubsequenceDynamicProgramming(str1[0:-1],str2[0:-1])
-    return max(longestCommonSubsequenceDynamicProgramming(str1[0:-1],str2),longestCommonSubsequenceDynamicProgramming(str1,str2[0:-1]))
+    if str1[-1]==str2[-1]: return 1+longestCommonSubsequenceRecursion(str1[0:-1],str2[0:-1])
+    return max(longestCommonSubsequenceRecursion(str1[0:-1],str2),longestCommonSubsequenceRecursion(str1,str2[0:-1]))
 
 
 #brute force algorithm for longest common sequence

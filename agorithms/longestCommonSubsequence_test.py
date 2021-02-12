@@ -10,16 +10,16 @@ import math
 
 class TestLongestCommonSubsequence(unittest.TestCase):
 
-    #This method is for testing longest common subsequence dynamic programming algorithm
-    def test_LongestCommonSequenceDynamic(self):
+    #This method is for testing longest common subsequence recursive algorithm
+    def test_LongestCommonSequenceRecursion(self):
         #edge cases
-        self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("",""),0)
-        self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("ab","cd"),0)
-        self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("hfsdui","hfsdui"),6)
+        self.assertEqual(lcs.longestCommonSubsequenceRecursion("",""),0)
+        self.assertEqual(lcs.longestCommonSubsequenceRecursion("ab","cd"),0)
+        self.assertEqual(lcs.longestCommonSubsequenceRecursion("hfsdui","hfsdui"),6)
 
         #normal cases
-        self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("hfsdui","hfsduiksae"),6)
-        self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("kjsdhfse","jaukadfj"),3)
+        self.assertEqual(lcs.longestCommonSubsequenceRecursion("hfsdui","hfsduiksae"),6)
+        self.assertEqual(lcs.longestCommonSubsequenceRecursion("kjsdhfse","jaukadfj"),3)
 
         #compare with brute force algorithm
         for i in range(1,4,100):
@@ -28,7 +28,7 @@ class TestLongestCommonSubsequence(unittest.TestCase):
             for _ in range(i):
                 str1+=random.choice(string.ascii_letters)
                 str2+=random.choice(string.ascii_letters)
-            commonStrLenDynamic=lcs.longestCommonSubsequenceDynamicProgramming(str1,str2)
+            commonStrLenDynamic=lcs.longestCommonSubsequenceRecursion(str1,str2)
             commonStrs=lcs.longestCommonSubsequenceBrute(str1,str2)
             commonStrLenBrute=len(commonStrs[-1]) if commonStrs!=None else 0
             self.assertEqual(commonStrLenDynamic,commonStrLenBrute)
