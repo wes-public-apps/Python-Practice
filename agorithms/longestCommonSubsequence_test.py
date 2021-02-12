@@ -10,6 +10,24 @@ import math
 
 class TestLongestCommonSubsequence(unittest.TestCase):
 
+    #This method is for testing longest common subsequence dynamic programming algorithm
+    def test_LongestCommonSequenceDynamic(self):
+        self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("",""),0)
+        self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("ab","cd"),0)
+        self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("hfsdui","hfsdui"),6)
+        self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("hfsdui","hfsduiksae"),6)
+        for i in range(1,4,100):
+            str1=''
+            str2=''
+            for _ in range(i):
+                str1+=random.choice(string.ascii_letters)
+                str2+=random.choice(string.ascii_letters)
+            commonStrLenDynamic=lcs.longestCommonSubsequenceDynamicProgramming(str1,str2)
+            commonStrs=lcs.longestCommonSubsequenceBrute(str1,str2)
+            commonStrLenBrute=len(commonStrs[-1]) if commonStrs!=None else 0
+            self.assertEqual(commonStrLenDynamic,commonStrLenBrute)
+
+
     #This method is for testing longest common subsequence brute force algorithm
     def test_LongestCommonSequenceBrute(self):
         self.assertEqual(lcs.longestCommonSubsequenceBrute("hfsdui","hfsduiksae"),["hfsdui"])
