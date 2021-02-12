@@ -4,15 +4,26 @@
 
 import unittest
 import longestCommonSubsequence as lcs
+import random
+import string
+import math
 
 class TestLongestCommonSubsequence(unittest.TestCase):
 
     #This method is for testing longest common subsequence brute force algorithm
     def test_LongestCommonSequenceBrute(self):
-        self.assertTrue(True)
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("hfsdui","hfsduiksae"),["hfsdui"])
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("hfsdui","hfsdui"),["hfsdui"])
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("kjsdhfse","jaukadfj").sort(),['jdf','kdf'].sort())
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("abc","defgh"),None)
 
     #test method for listing all substrings
     def test_listAllSubstringsBruteForce(self):
+        for i in range(1,4,100):
+            base=''
+            for _ in range(i):
+                base+=random.choice(string.ascii_letters)
+            self.assertEqual(len(lcs.listAllSubstringsBruteForce(base)),math.pow(2,i)-1)
         self.assertEqual(lcs.listAllSubstringsBruteForce("CKBE"),['C', 'K', 'B', 'E', 'CK', 'CB', 'CE', 'KB', 'KE', 'BE', 'CKB', 'CKE', 'CBE', 'KBE', 'CKBE'])
         self.assertEqual(lcs.listAllSubstringsBruteForce("ABCD"),['A', 'B', 'C', 'D', 'AB', 'AC', 'AD', 'BC', 'BD', 'CD', 'ABC', 'ABD', 'ACD', 'BCD', 'ABCD'])
         self.assertEqual(lcs.listAllSubstringsBruteForce("DAB"),['D', 'A', 'B','DA', 'DB', 'AB', 'DAB'])
