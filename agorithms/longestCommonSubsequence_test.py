@@ -12,10 +12,16 @@ class TestLongestCommonSubsequence(unittest.TestCase):
 
     #This method is for testing longest common subsequence dynamic programming algorithm
     def test_LongestCommonSequenceDynamic(self):
+        #edge cases
         self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("",""),0)
         self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("ab","cd"),0)
         self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("hfsdui","hfsdui"),6)
+
+        #normal cases
         self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("hfsdui","hfsduiksae"),6)
+        self.assertEqual(lcs.longestCommonSubsequenceDynamicProgramming("kjsdhfse","jaukadfj"),3)
+
+        #compare with brute force algorithm
         for i in range(1,4,100):
             str1=''
             str2=''
@@ -30,13 +36,22 @@ class TestLongestCommonSubsequence(unittest.TestCase):
 
     #This method is for testing longest common subsequence brute force algorithm
     def test_LongestCommonSequenceBrute(self):
-        self.assertEqual(lcs.longestCommonSubsequenceBrute("hfsdui","hfsduiksae"),["hfsdui"])
-        self.assertEqual(lcs.longestCommonSubsequenceBrute("hfsdui","hfsdui"),["hfsdui"])
-        self.assertEqual(lcs.longestCommonSubsequenceBrute("kjsdhfse","jaukadfj").sort(),['jdf','kdf'].sort())
+        #edge cases
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("",""),None)
         self.assertEqual(lcs.longestCommonSubsequenceBrute("abc","defgh"),None)
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("hfsdui","hfsdui"),["hfsdui"])
+        
+        #normal cases
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("hfsdui","hfsduiksae"),["hfsdui"])
+        self.assertEqual(lcs.longestCommonSubsequenceBrute("kjsdhfse","jaukadfj").sort(),['jdf','kdf'].sort())
 
     #test method for listing all substrings
     def test_listAllSubstringsBruteForce(self):
+        #edge cases
+        self.assertEqual(lcs.listAllSubstringsBruteForce("A"),['A'])
+        self.assertEqual(lcs.listAllSubstringsBruteForce(''),[])
+
+        #normal cases
         for i in range(1,4,100):
             base=''
             for _ in range(i):

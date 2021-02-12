@@ -17,6 +17,8 @@ def longestCommonSubsequenceDynamicProgramming(str1,str2):
 #O(2^n * 2^m) if all possible substrings are compared to each other
 #this implementation only checks substrings that are the same length making it O(2^n)
 def longestCommonSubsequenceBrute(str1,str2):
+    if len(str1)==0 or len(str2)==0: return None
+    
     longestSubs = []
 
     str1Len=len(str1)
