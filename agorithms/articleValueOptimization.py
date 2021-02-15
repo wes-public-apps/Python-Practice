@@ -70,6 +70,11 @@ def __buildArticleList(pages,articleInds,pageLimit,numArticles):
 
     return articles
 
+#This function solves the article value optimization problem using dynamic programming
+#This program experiences O(n) time complexity but O(n*m) memory complexity. m is the page limit.
+def dynamicProgrammingSolution(pages,IQ,pageLimit):
+    if not inputValid(pages,IQ,pageLimit): return []
+
 #This function solves the article value optimization problem using brute force.
 #This does not handle ties. That functionality could easily be added but is unnecessary. 
 #This algorithm gets very costly as the input size (n) increases. 2^n combinations to check.

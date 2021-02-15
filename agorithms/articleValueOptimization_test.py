@@ -9,6 +9,10 @@ import time
 
 class TestArticleValueOptimization(unittest.TestCase):
 
+    #test dynamic programming solution
+    def test_dynamicProgramming(self):
+        self.assertTrue(True)
+
     def test_greedyByIQ(self):
         #expected failure cases
         pages=[5,5,5,11]
