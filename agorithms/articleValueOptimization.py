@@ -12,7 +12,7 @@ import math
 import sorting as Sort
 
 #use a greedy algorithm based on highest IQ to determine the best article combination
-#O(n)
+#O(n log n)
 def greedyByIQ(pages,IQ,pageLimit):
     if not inputValid(pages,IQ,pageLimit): return []
 
@@ -26,7 +26,7 @@ def greedyByIQ(pages,IQ,pageLimit):
     return __buildArticleList(pages,articleInds,pageLimit,len(pages))
 
 #use a greedy algorithm based on lowest page length to determine the best article combination
-#O(n)
+#O(n log n)
 def greedyByPage(pages,IQ,pageLimit):
     if not inputValid(pages,IQ,pageLimit): return []
 
@@ -40,7 +40,7 @@ def greedyByPage(pages,IQ,pageLimit):
     return __buildArticleList(pages,articleInds,pageLimit,len(pages))
 
 #use a greedy algorithm based on IQ density to determine the best article combination
-#O(n)
+#O(n log n)
 def greedyByIQPerPage(pages,IQ,pageLimit):
     if not inputValid(pages,IQ,pageLimit): return []
 
