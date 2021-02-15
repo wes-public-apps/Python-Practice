@@ -9,6 +9,66 @@
 # meeting the total page limit constraint.
 
 import math
+import sorting as Sort
+
+#use a greedy algorithm based on highest IQ to determine the best article combination
+#O(n)
+def greedyByIQ(pages,IQ,pageLimit):
+    if not inputValid(pages,IQ,pageLimit): return []
+
+    # track article index for sorting
+    articleInds=list(range(len(pages)))
+    
+    #sort list of data by IQ density values to have the highest value first
+    IQ,articleInds,pages = [list(pair) for pair in zip(*sorted(zip(IQ,articleInds,pages),reverse=True))]
+
+    # add the most dense material first
+    return __buildArticleList(pages,articleInds,pageLimit,len(pages))
+
+#use a greedy algorithm based on lowest page length to determine the best article combination
+#O(n)
+def greedyByPage(pages,IQ,pageLimit):
+    if not inputValid(pages,IQ,pageLimit): return []
+
+    # track article index for sorting
+    articleInds=list(range(len(pages)))
+    
+    #sort list of data by IQ density values to have the highest value first
+    pages,articleInds = [list(pair) for pair in zip(*sorted(zip(pages,articleInds)))]
+
+    # add the most dense material first
+    return __buildArticleList(pages,articleInds,pageLimit,len(pages))
+
+#use a greedy algorithm based on IQ density to determine the best article combination
+#O(n)
+def greedyByIQPerPage(pages,IQ,pageLimit):
+    if not inputValid(pages,IQ,pageLimit): return []
+
+    # create list of IQ density per page
+    articleInds=[]
+    IQperPage=[]
+    for i in range(len(pages)):
+        IQperPage.append(IQ[i]/pages[i])
+        articleInds.append(i)
+
+    #sort list of data by IQ density values to have the highest value first
+    IQperPage,articleInds,pages,IQ = [list(pair) for pair in zip(*sorted(zip(IQperPage,articleInds,pages,IQ),reverse=True))]
+
+    # add the most dense material first
+    return __buildArticleList(pages,articleInds,pageLimit,len(pages))
+
+def __buildArticleList(pages,articleInds,pageLimit,numArticles):
+    articles = []
+    numPages=0
+    for i in range(numArticles):
+        numPages+=pages[i]
+        if numPages>pageLimit:
+            numPages-=pages[i]
+            continue
+        articles.append(articleInds[i])
+    Sort.quicksort(articles)
+
+    return articles
 
 #This function solves the article value optimization problem using brute force.
 #This does not handle ties. That functionality could easily be added but is unnecessary. 
