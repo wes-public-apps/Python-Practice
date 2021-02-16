@@ -78,39 +78,28 @@ def dynamicProgrammingSolution(pages,IQ,pageLimit):
     #first implement simple dynamic programming and then optimize memory.
     
     #represent the 2D problem with a 1D array
-    numRows=pageLimit+1
-    numCols=len(pages)+1
-    table = [0]*numRows*numCols
-    for i in range(1,numRows):
-        for j in range(1,numCols):
-            valueAbove=__2dTo1DArray(table,i-1,j,numCols)
-            valueWithCurrObject=__2dTo1DArray(table,i-1,j-pages[i-1],numCols)+IQ[i-1] if j-pages[i-1]>=0 else 0
-            __2dTo1DArray(table,i,j,numCols,insert=True,value=max(valueAbove,valueWithCurrObject))
+    table = TwoDList(len(pages)+1,pageLimit+1)
+    for i in range(1,table.getNumRows()):
+        for j in range(1,table.getNumCols()):
+            valueAbove=table.get(i-1,j)
+            valueWithCurrObject=table.get(i-1,j-pages[i-1])+IQ[i-1] if j-pages[i-1]>=0 else 0
+            table.replace(i,j,max(valueAbove,valueWithCurrObject))
 
     #retrace path
     articles=[]
     row=-1
     col=-1
-    pageCount=__2dTo1DArray(table,row,col,numCols)
+    pageCount=table.get(row,col)
     while pageCount>0:
-        if __2dTo1DArray(table,row-1,col,numCols)==pageCount:
+        if table.get(row-1,col)==pageCount:
             row-=1
             continue
         
-        articles.append(numRows-1+row)
+        articles.append(table.getNumRows()-1+row)
         pageCount-=pages[row]
-        while __2dTo1DArray(table,row,col,numCols)!=pageCount and col>=0: col-=1
+        while table.get(row,col)!=pageCount and col>=0: col-=1
     articles.sort()
     return articles
-
-#simple helper method for representing 2D array as a 1D
-#support negative indexing
-def __2dTo1DArray(arr,row,col,numCols,insert=False,value=0):
-    adj=0 if col>=0 else numCols
-    if insert:
-        arr[row*numCols+adj-col]=value
-    else:
-        return arr[row*numCols+adj-col]
 
 #This function solves the article value optimization problem using brute force.
 #This does not handle ties. That functionality could easily be added but is unnecessary. 
@@ -175,3 +164,31 @@ def inputValid(pages,IQ,pageLimit):
         return False
 
     return True
+
+#helper class to make working with 2D lists easier.
+class TwoDList(list):
+    #constructor
+    def __init__(self,numRows,numCols):
+        self.__numRows=numRows
+        self.__numCols=numCols
+        self.__table=[0]*numRows*numCols
+
+    #convert 2D index to 1D
+    #Support negative indices
+    def __2Dto1DIndex(self,row,col):
+        adj=0 if col>=0 else self.__numCols
+        return row*self.__numCols+adj+col
+
+    #get item from list
+    def get(self,row,col):
+        return self.__table[self.__2Dto1DIndex(row,col)]
+
+    #replace item in list
+    def replace(self,row,col,val):
+        self.__table[self.__2Dto1DIndex(row,col)]=val
+
+    def getNumCols(self):
+        return self.__numCols
+
+    def getNumRows(self):
+        return self.__numRows
