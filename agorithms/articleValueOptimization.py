@@ -75,6 +75,40 @@ def __buildArticleList(pages,articleInds,pageLimit,numArticles):
 def dynamicProgrammingSolution(pages,IQ,pageLimit):
     if not inputValid(pages,IQ,pageLimit): return []
 
+    #first implement simple dynamic programming and then optimize memory.
+    
+    #represent the 2D problem with a 1D array
+    xLen=pageLimit+1
+    yLen=len(pages)+1
+    yPos=0
+    numElements = xLen*yLen
+    table = [0]*numElements
+    for i in range(xLen+1,numElements):
+        if i%xLen==0: yPos+=1
+        valueAbove=table[i-xLen]
+        indLowBound=i-i%xLen-xLen
+        indHigh=i-xLen-pages[yPos]
+        valueWithCurrObject=table[i-xLen-pages[yPos]]+IQ[yPos] if indHigh>=indLowBound else 0
+        table[i]=max(valueAbove,valueWithCurrObject)
+
+    #retrace path
+    articles=[]
+    ind=-1
+    pageCount=table[ind]
+    yPos=0
+    while pageCount>0:
+        if table[ind]==pageCount:
+            ind-=xLen
+            yPos-=1
+            continue
+        
+        pageCount-=IQ[yPos]
+        while table[ind]!=pageCount and ind%xLen>0: ind-=1
+        if ind%xLen==0: break
+        articles.append(yLen-1+yPos)
+    articles.sort()
+    return articles
+
 #This function solves the article value optimization problem using brute force.
 #This does not handle ties. That functionality could easily be added but is unnecessary. 
 #This algorithm gets very costly as the input size (n) increases. 2^n combinations to check.
