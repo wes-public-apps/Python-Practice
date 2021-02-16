@@ -6,7 +6,7 @@
 import unittest
 from dynamicProgramming import *
 
-class TestDynamicProgramming(unittest.TestCase):
+class TestDynamicProgrammingHelpers(unittest.TestCase):
 
     def test_ItemClass(self):
         # there is nothing to test here. just getters.
@@ -32,11 +32,28 @@ class TestDynamicProgramming(unittest.TestCase):
         self.assertEqual(table.getNumCols(),8)
         self.assertEqual(table.getNumRows(),4)
 
+class TestDynamicProgramming(unittest.TestCase):
     def test_OptimizationProblemClass_General(self):
+        #edge cases
         pass
 
+        #normal cases
+        weight=[3,4,5,2]
+        value=[2,5,6,1]
+        items=OptimizationProblem.createItemCollection(weight,value)
+        for i in range(len(value)):
+            self.assertEqual(items[i].getCost(),weight[i])
+            self.assertEqual(items[i].getValue(),value[i])
+            self.assertEqual(items[i].getId(),i)
+        dp=OptimizationProblem(items,8)
+
+
     def test_OptimizationProblemClass_Tabulation(self):
+        #edge cases
         pass
+
+        #normal cases
+        
 
     def test_OptimizationProblemClass_SolutionTracing(self):
         pass

@@ -53,7 +53,6 @@ class OptimizationProblem():
                 valueWithCurrObject=table.get(i-1,j-self.__items[i-1].getCost())+self.__items[i-1].getValue() if j-self.__items[i-1].getCost()>=0 else 0
                 table.replace(i,j,max(valueAbove,valueWithCurrObject))
         self.__table=table
-        return True
 
     def _parseTableForSolution(self):
         self.__solution=[]
@@ -80,6 +79,9 @@ class OptimizationProblem():
 
     def getSolution(self):
         return self.__solution
+
+    def getTable(self):
+        return self.__table
 
 #helper class to make working with 2D lists easier.
 class TwoDList(list):
