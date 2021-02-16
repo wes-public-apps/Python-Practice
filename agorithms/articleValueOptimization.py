@@ -78,36 +78,39 @@ def dynamicProgrammingSolution(pages,IQ,pageLimit):
     #first implement simple dynamic programming and then optimize memory.
     
     #represent the 2D problem with a 1D array
-    xLen=pageLimit+1
-    yLen=len(pages)+1
-    yPos=0
-    numElements = xLen*yLen
-    table = [0]*numElements
-    for i in range(xLen+1,numElements):
-        if i%xLen==0: yPos+=1
-        valueAbove=table[i-xLen]
-        indLowBound=i-i%xLen-xLen
-        indHigh=i-xLen-pages[yPos]
-        valueWithCurrObject=table[i-xLen-pages[yPos]]+IQ[yPos] if indHigh>=indLowBound else 0
-        table[i]=max(valueAbove,valueWithCurrObject)
+    numRows=pageLimit+1
+    numCols=len(pages)+1
+    table = [0]*numRows*numCols
+    for i in range(1,numRows):
+        for j in range(1,numCols):
+            valueAbove=__2dTo1DArray(table,i-1,j,numCols)
+            valueWithCurrObject=__2dTo1DArray(table,i-1,j-pages[i-1],numCols)+IQ[i-1] if j-pages[i-1]>=0 else 0
+            __2dTo1DArray(table,i,j,numCols,insert=True,value=max(valueAbove,valueWithCurrObject))
 
     #retrace path
     articles=[]
-    ind=-1
-    pageCount=table[ind]
-    yPos=0
+    row=-1
+    col=-1
+    pageCount=__2dTo1DArray(table,row,col,numCols)
     while pageCount>0:
-        if table[ind]==pageCount:
-            ind-=xLen
-            yPos-=1
+        if __2dTo1DArray(table,row-1,col,numCols)==pageCount:
+            row-=1
             continue
         
-        pageCount-=IQ[yPos]
-        while table[ind]!=pageCount and ind%xLen>0: ind-=1
-        if ind%xLen==0: break
-        articles.append(yLen-1+yPos)
+        articles.append(numRows-1+row)
+        pageCount-=pages[row]
+        while __2dTo1DArray(table,row,col,numCols)!=pageCount and col>=0: col-=1
     articles.sort()
     return articles
+
+#simple helper method for representing 2D array as a 1D
+#support negative indexing
+def __2dTo1DArray(arr,row,col,numCols,insert=False,value=0):
+    adj=0 if col>=0 else numCols
+    if insert:
+        arr[row*numCols+adj-col]=value
+    else:
+        return arr[row*numCols+adj-col]
 
 #This function solves the article value optimization problem using brute force.
 #This does not handle ties. That functionality could easily be added but is unnecessary. 
