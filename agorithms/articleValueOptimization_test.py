@@ -14,6 +14,7 @@ class TestArticleValueOptimization(unittest.TestCase):
 
         #edge cases
         self.assertEqual(avo.dynamicProgrammingSolution([3,5,6],[1,2,4],2),[])
+        self.assertEqual(avo.dynamicProgrammingSolution([3,2],[1,4],2),[1])
         self.assertEqual(avo.dynamicProgrammingSolution([3,9,2,13,5,6],[1,60,4,100,24,0],8),[2,4])
         self.assertEqual(avo.dynamicProgrammingSolution([1,2,3],[10,10,10],6),[0,1,2])
         #not handling ties. if both options are equal it does not matter which one is returned.
@@ -51,7 +52,7 @@ class TestArticleValueOptimization(unittest.TestCase):
         self.assertEqual(avo.greedyByIQ([32,18,26,12],[40,12,12,24],32),[0])
 
         #relative accuracy
-        numTestCases=100
+        numTestCases=15
         countCorrect=0
         for i in range(numTestCases):
             # print('test case: '+str(i))
@@ -93,7 +94,7 @@ class TestArticleValueOptimization(unittest.TestCase):
         self.assertEqual(avo.greedyByPage([32,18,26,12],[40,12,12,24],32),[1,3])
 
         #relative accuracy
-        numTestCases=100
+        numTestCases=15
         countCorrect=0
         for i in range(numTestCases):
             # print('test case: '+str(i))
@@ -135,7 +136,7 @@ class TestArticleValueOptimization(unittest.TestCase):
         self.assertEqual(avo.greedyByIQPerPage([32,18,26,12],[40,12,12,24],32),[1,3])
 
         #relative accuracy
-        numTestCases=100
+        numTestCases=15
         countCorrect=0
         for i in range(numTestCases):
             # print('test case: '+str(i))
