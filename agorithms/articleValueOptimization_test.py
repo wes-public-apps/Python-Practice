@@ -11,7 +11,27 @@ class TestArticleValueOptimization(unittest.TestCase):
 
     #test dynamic programming solution
     def test_dynamicProgramming(self):
-        self.assertTrue(True)
+
+        #edge cases
+        self.assertEqual(avo.dynamicProgrammingSolution([3,5,6],[1,2,4],2),[])
+        self.assertEqual(avo.dynamicProgrammingSolution([3,9,2,13,5,6],[1,60,4,100,24,0],8),[2,4])
+        self.assertEqual(avo.dynamicProgrammingSolution([1,2,3],[10,10,10],6),[0,1,2])
+        #not handling ties. if both options are equal it does not matter which one is returned.
+
+        #normal cases
+        self.assertEqual(avo.dynamicProgrammingSolution([2,5,2,7],[14,10,11,30],10),[0,3])
+        self.assertEqual(avo.dynamicProgrammingSolution([2,5,9,2,7],[14,10,4,11,30],18),[0,1,3,4])
+        for _ in range(15):
+            pages=[]
+            IQ=[]
+            numArticles=random.randint(1,20)
+            pageLimit=random.randint(1,100)
+            for _ in range(numArticles):
+                pages.append(random.randint(1,100))
+                IQ.append(random.randint(1,100))
+            bruteForceRes=avo.bruteForceSolution(pages,IQ,pageLimit)
+            dynamicRes=avo.dynamicProgrammingSolution(pages,IQ,pageLimit)
+            self.assertEqual(bruteForceRes,dynamicRes)
 
     def test_greedyByIQ(self):
         #expected failure cases
