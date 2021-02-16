@@ -71,13 +71,11 @@ def __buildArticleList(pages,articleInds,pageLimit,numArticles):
     return articles
 
 #This function solves the article value optimization problem using dynamic programming
-#This program experiences O(n) time complexity but O(n*m) memory complexity. m is the page limit.
+#This program experiences O(n+m) time complexity but O(n*m) memory complexity. m is the page limit.
 def dynamicProgrammingSolution(pages,IQ,pageLimit):
     if not inputValid(pages,IQ,pageLimit): return []
 
-    #first implement simple dynamic programming and then optimize memory.
-    
-    #represent the 2D problem with a 1D array
+    #populate table with information
     table = TwoDList(len(pages)+1,pageLimit+1)
     for i in range(1,table.getNumRows()):
         for j in range(1,table.getNumCols()):
@@ -85,19 +83,28 @@ def dynamicProgrammingSolution(pages,IQ,pageLimit):
             valueWithCurrObject=table.get(i-1,j-pages[i-1])+IQ[i-1] if j-pages[i-1]>=0 else 0
             table.replace(i,j,max(valueAbove,valueWithCurrObject))
 
-    #retrace path
+    #determine solution by retracing path through table
     articles=[]
     row=-1
     col=-1
-    pageCount=table.get(row,col)
-    while pageCount>0:
-        if table.get(row-1,col)==pageCount:
+    value=table.get(row,col)
+    while value>0:
+        if table.get(row-1,col)==value:
             row-=1
             continue
         
         articles.append(table.getNumRows()-1+row)
-        pageCount-=pages[row]
-        while table.get(row,col)!=pageCount and col>=0: col-=1
+        value-=IQ[row]
+        while table.get(row,col)!=value: 
+            if col%table.getNumCols()!=0:
+                col-=1
+            else:
+                row -=1
+                col+=table.getNumCols()-1
+            if row<(-table.getNumRows()):
+                value=0
+                break
+
     articles.sort()
     return articles
 
@@ -171,7 +178,7 @@ class TwoDList(list):
     def __init__(self,numRows,numCols):
         self.__numRows=numRows
         self.__numCols=numCols
-        self.__table=[0]*numRows*numCols
+        super().__init__([0]*numRows*numCols)
 
     #convert 2D index to 1D
     #Support negative indices
@@ -181,11 +188,11 @@ class TwoDList(list):
 
     #get item from list
     def get(self,row,col):
-        return self.__table[self.__2Dto1DIndex(row,col)]
+        return super(TwoDList,self).__getitem__(self.__2Dto1DIndex(row,col))
 
     #replace item in list
     def replace(self,row,col,val):
-        self.__table[self.__2Dto1DIndex(row,col)]=val
+        list.__setitem__(self,self.__2Dto1DIndex(row,col),val)
 
     def getNumCols(self):
         return self.__numCols
