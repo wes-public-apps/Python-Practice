@@ -3,29 +3,7 @@
 # This file was created to house dynamic programming utilities.
 # This goal is to have a program that can solve any dynamic programming problem.
 # It will define a standard template that problems will be transformed into.
-
-def isNum(val):
-    return type(val)==int or type(val)==float
-
-#create a class to represent items in a dynamic programming problem
-class Item():
-    def __init__(self,itemId,cost,value):
-        #minor input validation
-        if not isNum(itemId) or not isNum(cost) or not isNum(value):
-            raise ValueError("args must be a number")
-             
-        self.__id=itemId
-        self.__cost=cost
-        self.__value=value
-
-    def getCost(self):
-        return self.__cost
-
-    def getValue(self):
-        return self.__value
-
-    def getId(self):
-        return self.__id
+# This file contains both my original and optimized solutions.
 
 #Set up the dynamic programming problem
 class OptimizationProblem():
@@ -47,7 +25,6 @@ class OptimizationProblem():
         if costs==[] or values==[]: raise ValueError("Args cannot be []")
         if len(costs)!=len(values): raise ValueError("Args cannot be of different length")
 
-    #constructor
     def __init__(self,items,limit):
         self.__items=items
         self.__numItems=len(items)
@@ -56,6 +33,8 @@ class OptimizationProblem():
         self.__maxValue=0
 
     #memory optimized tabularization
+    #O(n) space complexity
+    #O(n*m) time complexity
     def optimizedSolve(self):
         #define a dictionary to store relevant table values so a solution can be reconstructed
         sparseMem={}
@@ -63,6 +42,7 @@ class OptimizationProblem():
         table=self._createOptimizedTable(sparseMem)
         return self._determineOptimizedSolution(table,sparseMem)
 
+    #generate sparse table
     def _createOptimizedTable(self,sparseMem):
         #define a 2D list that only has two rows 
         #only the previous and current row are needed to determine to perform calculations for dynamic programming
@@ -86,6 +66,7 @@ class OptimizationProblem():
         self.__maxValue=table.get(self.__numItems%2,-1)
         return table
     
+    #determine solution from sparse table
     def _determineOptimizedSolution(self,table,sparseMem):
         #construct solution from sparse memory
         value=self.__maxValue
@@ -99,6 +80,8 @@ class OptimizationProblem():
         return solution
 
     #solve the dynamic programming problem
+    #O(n*m) space complexity
+    #O(n*m) time complexity
     def solve(self):
         table=self._createTable()
         return self.determineSolution(table)
@@ -156,9 +139,31 @@ class OptimizationProblem():
     def getSolution(self):
         return self.__solution
 
+def isNum(val):
+    return type(val)==int or type(val)==float
+
+#create a class to represent items in a dynamic programming problem
+class Item():
+    def __init__(self,itemId,cost,value):
+        #minor input validation
+        if not isNum(itemId) or not isNum(cost) or not isNum(value):
+            raise ValueError("args must be a number")
+             
+        self.__id=itemId
+        self.__cost=cost
+        self.__value=value
+
+    def getCost(self):
+        return self.__cost
+
+    def getValue(self):
+        return self.__value
+
+    def getId(self):
+        return self.__id
+
 #helper class to make working with 2D lists easier.
 class TwoDList(list):
-    #constructor
     def __init__(self,numRows,numCols):
         self.__numRows=numRows
         self.__numCols=numCols
@@ -178,10 +183,8 @@ class TwoDList(list):
     def replace(self,row,col,val):
         list.__setitem__(self,self.__2Dto1DIndex(row,col),val)
 
-    #get the number of columns in 2D array
     def getNumCols(self):
         return self.__numCols
 
-    #get number of rows in 2D array
     def getNumRows(self):
         return self.__numRows
