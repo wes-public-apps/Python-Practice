@@ -4,9 +4,16 @@
 # This goal is to have a program that can solve any dynamic programming problem.
 # It will define a standard template that problems will be transformed into.
 
-#create a class to represent items
+def isNum(val):
+    return type(val)==int or type(val)==float
+
+#create a class to represent items in a dynamic programming problem
 class Item():
     def __init__(self,itemId,cost,value):
+        #minor input validation
+        if not isNum(itemId) or not isNum(cost) or not isNum(value):
+            raise ValueError("args must be a number")
+             
         self.__id=itemId
         self.__cost=cost
         self.__value=value
@@ -22,17 +29,25 @@ class Item():
 
 #Set up the dynamic programming problem
 class OptimizationProblem():
+
     #Create a collection of items for dynamic programming solutions
     @staticmethod
     def createItemCollection(costs,values):
-        if costs==None or values==None: return None
-        if len(costs)!=len(values): return None
+        OptimizationProblem.validateInput(costs,values)
 
         items =[]
         for i in range(len(costs)):
             items.append(Item(i,costs[i],values[i]))
         return items
 
+    #Validate input
+    @staticmethod
+    def validateInput(costs,values):
+        if type(costs)!=list or type(values)!=list: raise ValueError("Args must be lists")
+        if costs==[] or values==[]: raise ValueError("Args cannot be []")
+        if len(costs)!=len(values): raise ValueError("Args cannot be of different length")
+
+    #constructor
     def __init__(self,items,limit):
         self.__items=items
         self.__numItems=len(items)
@@ -40,33 +55,44 @@ class OptimizationProblem():
         self.__table=None
         self.__solution=None
 
+    #solve the dynamic programming problem
     def solve(self):
-        #create table
-        #get solution from table
-        pass
+        self._createTable()
+        self._parseTableForSolution()
+        return self.__solution
 
+    #generate a table to solve the problem
     def _createTable(self):
+        #use helper class to create a 2D list a 1D
         table = TwoDList(self.__numItems+1,self.__limit+1)
         for i in range(1,table.getNumRows()):
             for j in range(1,table.getNumCols()):
+                #determine element value
                 valueAbove=table.get(i-1,j)
                 valueWithCurrObject=table.get(i-1,j-self.__items[i-1].getCost())+self.__items[i-1].getValue() if j-self.__items[i-1].getCost()>=0 else 0
                 table.replace(i,j,max(valueAbove,valueWithCurrObject))
         self.__table=table
 
+    #retrace steps through table to determine solution
     def _parseTableForSolution(self):
         self.__solution=[]
         table=self.__table
         row=-1
         col=-1
         value=table.get(row,col)
+        
+        #loop until that last possible item that can fit is selected
         while value>0:
+            #if the value in the row above is equal move to that element
             if table.get(row-1,col)==value:
                 row-=1
                 continue
             
+            #account for item being included
             self.__solution.append(self.__items[row].getId())
             value-=self.__items[row].getValue()
+
+            #find the next item to include
             while table.get(row,col)!=value: 
                 if col%table.getNumCols()!=0:
                     col-=1
@@ -76,10 +102,14 @@ class OptimizationProblem():
                 if row<(-table.getNumRows()):
                     value=0
                     break
+        #reorder solution.
+        self.__solution.reverse()
 
+    #return the solution
     def getSolution(self):
         return self.__solution
 
+    #return the table created to solve problem
     def getTable(self):
         return self.__table
 
@@ -89,7 +119,7 @@ class TwoDList(list):
     def __init__(self,numRows,numCols):
         self.__numRows=numRows
         self.__numCols=numCols
-        super().__init__([0]*numRows*numCols)
+        super().__init__([0]*numRows*numCols) #initialize 1D list
 
     #convert 2D index to 1D
     #Support negative indices
@@ -105,8 +135,10 @@ class TwoDList(list):
     def replace(self,row,col,val):
         list.__setitem__(self,self.__2Dto1DIndex(row,col),val)
 
+    #get the number of columns in 2D array
     def getNumCols(self):
         return self.__numCols
 
+    #get number of rows in 2D array
     def getNumRows(self):
         return self.__numRows
