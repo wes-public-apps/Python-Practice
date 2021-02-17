@@ -52,6 +52,8 @@ class OptimizationProblem():
         self.__items=items
         self.__numItems=len(items)
         self.__limit=limit
+        self.__solution=None
+        self.__maxValue=0
 
     #memory optimized tabularization
     def optimizedSolve(self):
@@ -59,17 +61,7 @@ class OptimizationProblem():
         sparseMem={}
 
         table=self._createOptimizedTable(sparseMem)
-        
-        #construct solution from sparse memory
-        value=table.get(-1,-1)
-        solution=[]
-        while value!=0:
-            itemInd = sparseMem[value]-1
-            solution.append(itemInd)
-            value-=self.__items[itemInd].getValue()
-        solution.reverse()
-
-        return solution
+        return self._determineOptimizedSolution(table,sparseMem)
 
     def _createOptimizedTable(self,sparseMem):
         #define a 2D list that only has two rows 
@@ -91,12 +83,25 @@ class OptimizationProblem():
                 #add relevant elements to the spares memory structure
                 if table.get(i%2,j)>table.get(i%2,j-1) and table.get(i%2,j)>table.get((i-1)%2,j): 
                     sparseMem[table.get(i%2,j)]=i
+        self.__maxValue=table.get(self.__numItems%2,-1)
         return table
+    
+    def _determineOptimizedSolution(self,table,sparseMem):
+        #construct solution from sparse memory
+        value=self.__maxValue
+        solution=[]
+        while value!=0:
+            itemInd = sparseMem[value]-1
+            solution.append(itemInd)
+            value-=self.__items[itemInd].getValue()
+        solution.reverse()
+        self.__solution=solution
+        return solution
 
     #solve the dynamic programming problem
     def solve(self):
         table=self._createTable()
-        return self._parseTableForSolution(table)
+        return self.determineSolution(table)
     
     #generate a table to solve the problem
     def _createTable(self):
@@ -108,10 +113,11 @@ class OptimizationProblem():
                 valueAbove=table.get(i-1,j)
                 valueWithCurrObject=table.get(i-1,j-self.__items[i-1].getCost())+self.__items[i-1].getValue() if j-self.__items[i-1].getCost()>=0 else 0
                 table.replace(i,j,max(valueAbove,valueWithCurrObject))
+        self.__maxValue=table.get(-1,-1)
         return table
 
     #retrace steps through table to determine solution
-    def _parseTableForSolution(self,table):
+    def determineSolution(self,table):
         solution=[]
         row=-1
         col=-1
@@ -141,7 +147,14 @@ class OptimizationProblem():
         #reorder solution.
         solution.reverse()
 
+        self.__solution=solution
         return solution
+    
+    def getMaxValue(self):
+        return self.__maxValue
+
+    def getSolution(self):
+        return self.__solution
 
 #helper class to make working with 2D lists easier.
 class TwoDList(list):
