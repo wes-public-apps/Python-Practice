@@ -54,26 +54,18 @@ class TestArticleValueOptimization(unittest.TestCase):
         #relative accuracy
         numTestCases=15
         countCorrect=0
-        for i in range(numTestCases):
-            # print('test case: '+str(i))
-            start=time.perf_counter()
+        for _ in range(numTestCases):
             pages=[]
             IQ=[]
             numArticles=random.randint(1,20)
-            # print('number of articles: '+str(numArticles))
             pageLimit=random.randint(1,100)
             for _ in range(numArticles):
                 pages.append(random.randint(1,100))
                 IQ.append(random.randint(1,100))
-            bruteStart=time.perf_counter()
             bruteForceRes=avo.bruteForceSolution(pages,IQ,pageLimit)
-            # print("Brute Time(s): "+str(time.perf_counter()-bruteStart))
-            greedyStart=time.perf_counter()
             greedyRes=avo.greedyByIQ(pages,IQ,pageLimit)
-            # print("Greedy Time(s): "+str(time.perf_counter()-greedyStart))
             if(greedyRes==bruteForceRes):
                 countCorrect+=1
-            # print("Iteration Time(s): "+str(time.perf_counter()-start))
         print('greedy highest IQ accuracy (%): '+str(countCorrect/numTestCases*100))
 
     def test_greedyByPage(self):
@@ -96,26 +88,19 @@ class TestArticleValueOptimization(unittest.TestCase):
         #relative accuracy
         numTestCases=15
         countCorrect=0
-        for i in range(numTestCases):
+        for _ in range(numTestCases):
             # print('test case: '+str(i))
-            start=time.perf_counter()
             pages=[]
             IQ=[]
             numArticles=random.randint(1,20)
-            # print('number of articles: '+str(numArticles))
             pageLimit=random.randint(1,100)
             for _ in range(numArticles):
                 pages.append(random.randint(1,100))
                 IQ.append(random.randint(1,100))
-            bruteStart=time.perf_counter()
             bruteForceRes=avo.bruteForceSolution(pages,IQ,pageLimit)
-            # print("Brute Time(s): "+str(time.perf_counter()-bruteStart))
-            greedyStart=time.perf_counter()
             greedyRes=avo.greedyByPage(pages,IQ,pageLimit)
-            # print("Greedy Time(s): "+str(time.perf_counter()-greedyStart))
             if(greedyRes==bruteForceRes):
                 countCorrect+=1
-            # print("Iteration Time(s): "+str(time.perf_counter()-start))
         print('greedy lowest pages accuracy (%): '+str(countCorrect/numTestCases*100))
 
     def test_greedyByIQPerPage(self):
@@ -138,26 +123,18 @@ class TestArticleValueOptimization(unittest.TestCase):
         #relative accuracy
         numTestCases=15
         countCorrect=0
-        for i in range(numTestCases):
-            # print('test case: '+str(i))
-            start=time.perf_counter()
+        for _ in range(numTestCases):
             pages=[]
             IQ=[]
             numArticles=random.randint(1,20)
-            # print('number of articles: '+str(numArticles))
             pageLimit=random.randint(1,100)
             for _ in range(numArticles):
                 pages.append(random.randint(1,100))
                 IQ.append(random.randint(1,100))
-            bruteStart=time.perf_counter()
             bruteForceRes=avo.bruteForceSolution(pages,IQ,pageLimit)
-            # print("Brute Time(s): "+str(time.perf_counter()-bruteStart))
-            greedyStart=time.perf_counter()
             greedyRes=avo.greedyByIQPerPage(pages,IQ,pageLimit)
-            # print("Greedy Time(s): "+str(time.perf_counter()-greedyStart))
             if(greedyRes==bruteForceRes):
                 countCorrect+=1
-            # print("Iteration Time(s): "+str(time.perf_counter()-start))
         print('greedy IQ density accuracy (%): '+str(countCorrect/numTestCases*100))
 
     #test brute force solution
