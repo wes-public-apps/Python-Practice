@@ -3,8 +3,11 @@
 # This file is for testing the dynamic programming class and all of its
 # supporting classes.
 
-import unittest
+import unittest, logging, sys
+
 from dynamicProgramming import Item,OptimizationProblem,TwoDList
+
+logging.basicConfig(stream=sys.stderr,level=logging.DEBUG) #debug logging is not working like I would like
 
 class TestDynamicProgrammingHelpers(unittest.TestCase):
 
@@ -66,6 +69,12 @@ class TestDynamicProgramming(unittest.TestCase):
         self.__tabulationHelp(self.pbs[0]._createTable,[0,0,0,100])
         self.__tabulationHelp(self.pbs[1]._createTable,[0]*8+[10]*6+[0]+[10]*2+[20]*4+[0]+[10,10]+[20]*3+[30])
 
+    #helper method for testing expected table structure
+    def __tabulationHelp(self,tableFunc,expected):
+        table=tableFunc()
+        for i in range(len(expected)):
+            self.assertEqual(table[i],expected[i])
+
     #test method that constructs table
     def test_OptimizationProblemClass_OptimizedTabulation(self):
         #edge cases
@@ -74,13 +83,7 @@ class TestDynamicProgramming(unittest.TestCase):
         #normal cases
         for i in range(len(self.pbs)):
             table=self.pbs[i]._createOptimizedTable({})
-            self.assertEqual(max(table.get(-1,-1),table.get(-2,-1)),self.pbsExpVal[i])
-    
-    #helper method for testing expected table structure
-    def __tabulationHelp(self,tableFunc,expected):
-        table=tableFunc()
-        for i in range(len(expected)):
-            self.assertEqual(table[i],expected[i])
+            self.assertEqual(self.pbs[i].getMaxValue(),self.pbsExpVal[i])
 
     #test solver
     def test_OptimizationProblemClass_solve(self):
@@ -88,8 +91,12 @@ class TestDynamicProgramming(unittest.TestCase):
         pass
 
         #normal
+        logging.debug("")
+        logging.debug("Solver. Show calculated solution and expected sibe by side below:")
         for i in range(len(self.pbs)):
-            self.assertEqual(self.pbs[i].solve(),self.pbsExp[i])
+            solution=self.pbs[i].solve()
+            logging.debug(str(solution)+" "+str(self.pbsExp[i]))
+            self.assertEqual(solution,self.pbsExp[i])
 
     #test memory optimize solver
     def test_OptimizationProblemClass_optimizedSolve(self):
@@ -97,8 +104,12 @@ class TestDynamicProgramming(unittest.TestCase):
         pass
 
         #normal
+        logging.debug("")
+        logging.debug("Optimized Solver. Show calculated solution and expected sibe by side below:")
         for i in range(len(self.pbs)):
-            self.assertEqual(self.pbs[i].optimizedSolve(),self.pbsExp[i])
+            solution=self.pbs[i].optimizedSolve()
+            logging.debug(str(solution)+" "+str(self.pbsExp[i]))
+            self.assertEqual(solution,self.pbsExp[i])
 
     #define some common data for testing
     @classmethod
