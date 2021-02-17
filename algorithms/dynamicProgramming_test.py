@@ -4,7 +4,7 @@
 # supporting classes.
 
 import unittest
-from dynamicProgramming import *
+from dynamicProgramming import Item,OptimizationProblem,TwoDList
 
 class TestDynamicProgrammingHelpers(unittest.TestCase):
 
@@ -36,6 +36,7 @@ class TestDynamicProgrammingHelpers(unittest.TestCase):
 
 class TestDynamicProgramming(unittest.TestCase):
     
+    #test ancilary functionality
     def test_OptimizationProblemClass_General(self):
         #Test Input Validation
         self.assertRaises(ValueError,OptimizationProblem.validateInput,None,[1])
@@ -56,39 +57,71 @@ class TestDynamicProgramming(unittest.TestCase):
             self.assertEqual(items[i].getValue(),value[i])
             self.assertEqual(items[i].getId(),i)
 
-
+    #test method that constructs table
     def test_OptimizationProblemClass_Tabulation(self):
         #edge cases
         pass
 
         #normal cases
-        self.__tabulationHelp([1,2,3],[10,10,10],6,[0]*8+[10]*6+[0]+[10]*2+[20]*4+[0]+[10,10]+[20]*3+[30])
-        self.__tabulationHelp([1],[100],1,[0,0,0,100])
+        self.__tabulationHelp(self.pbs[0]._createTable,[0,0,0,100])
+        self.__tabulationHelp(self.pbs[1]._createTable,[0]*8+[10]*6+[0]+[10]*2+[20]*4+[0]+[10,10]+[20]*3+[30])
+
+    #test method that constructs table
+    def test_OptimizationProblemClass_OptimizedTabulation(self):
+        #edge cases
+        pass
+
+        #normal cases
+        for i in range(len(self.pbs)):
+            table=self.pbs[i]._createOptimizedTable({})
+            self.assertEqual(max(table.get(-1,-1),table.get(-2,-1)),self.pbsExpVal[i])
     
-    #tests specific table example
-    def __tabulationHelp(self,costs,values,limit,expected):
-        items=OptimizationProblem.createItemCollection(costs,values)
-        dp=OptimizationProblem(items,limit)
-        dp._createTable()
-        table=dp.getTable()
+    #helper method for testing expected table structure
+    def __tabulationHelp(self,tableFunc,expected):
+        table=tableFunc()
         for i in range(len(expected)):
             self.assertEqual(table[i],expected[i])
-        
 
-    def test_OptimizationProblemClass_SolutionTracing(self):
+    #test solver
+    def test_OptimizationProblemClass_solve(self):
         #edge case
         pass
 
-        #normal case
-        self.__solutionTracingHelp([1,2,3],[10,10,10],6,[0,1,2])
-        self.__solutionTracingHelp([1],[100],1,[0])
-        self.__solutionTracingHelp([23,31,29,44,53,38,63,85,89,82],[92,57,49,68,60,43,67,84,87,72],165,[0,1,2,3,5])
+        #normal
+        for i in range(len(self.pbs)):
+            self.assertEqual(self.pbs[i].solve(),self.pbsExp[i])
 
-    def __solutionTracingHelp(self,costs,values,limit,expected):
+    #test memory optimize solver
+    def test_OptimizationProblemClass_optimizedSolve(self):
+        #edge case
+        pass
+
+        #normal
+        for i in range(len(self.pbs)):
+            self.assertEqual(self.pbs[i].optimizedSolve(),self.pbsExp[i])
+
+    #define some common data for testing
+    @classmethod
+    def setUpClass(self):
+        self.pbs=[]
+        #create dynamic programming problems
+        self.pbs.append(self.__createDP(self,[1],[100],1))
+        self.pbs.append(self.__createDP(self,[1,2,3],[10,10,10],6))
+        self.pbs.append(self.__createDP(self,[4,1,2,3,1],[2,7,11,11,5],5))
+        self.pbs.append(self.__createDP(self,[23,31,29,44,53,38,63,85,89,82],[92,57,49,68,60,43,67,84,87,72],165))
+        #define solutions to problems
+        self.pbsExp=[
+            [0],
+            [0,1,2],
+            [1,2,4],
+            [0,1,2,3,5]
+        ]
+        self.pbsExpVal=[100,30,23,309]
+    
+    #helper method for creating a dynamic programming problem instance
+    def __createDP(self,costs,values,limit):
         items=OptimizationProblem.createItemCollection(costs,values)
-        dp=OptimizationProblem(items,limit)
-        dp.solve()
-        self.assertEqual(dp.getSolution(),expected)
+        return OptimizationProblem(items,limit)
 
 if __name__ == '__main__':
     unittest.main()
