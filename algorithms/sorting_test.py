@@ -19,11 +19,11 @@ class TestSorting(unittest.TestCase):
         self.assertEqual(Sort.quicksort([65,39,86]),[39,65,86])
 
         #normal cases
-        for i in range(20):
+        for _ in range(20):
             temp=[]
             tempSort=[]
             testLen = random.randint(1,5)
-            for i in range(0,testLen):
+            for _ in range(0,testLen):
                 randNum = random.randint(0,100)
                 temp.append(randNum)
                 tempSort.append(randNum)
