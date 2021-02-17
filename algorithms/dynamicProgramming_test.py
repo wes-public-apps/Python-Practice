@@ -9,8 +9,10 @@ from dynamicProgramming import *
 class TestDynamicProgrammingHelpers(unittest.TestCase):
 
     def test_ItemClass(self):
-        # there is nothing to test here. just getters.
-        self.assertTrue(True) 
+        #verify input validation
+        self.assertRaises(ValueError,Item,1,"e",2)
+        self.assertRaises(ValueError,Item,"e",1,2)
+        self.assertRaises(ValueError,Item,1,2,"e")
     
     def test_TwoDListClass(self):
         table=TwoDList(2,2)
@@ -33,9 +35,17 @@ class TestDynamicProgrammingHelpers(unittest.TestCase):
         self.assertEqual(table.getNumRows(),4)
 
 class TestDynamicProgramming(unittest.TestCase):
+    
     def test_OptimizationProblemClass_General(self):
-        #edge cases
-        pass
+        #Test Input Validation
+        self.assertRaises(ValueError,OptimizationProblem.validateInput,None,[1])
+        self.assertRaises(ValueError,OptimizationProblem.validateInput,[1],None)
+        self.assertRaises(ValueError,OptimizationProblem.validateInput,[],[1])
+        self.assertRaises(ValueError,OptimizationProblem.validateInput,[1],[])
+        self.assertRaises(ValueError,OptimizationProblem.validateInput,[1,2],[1])
+        OptimizationProblem.validateInput([1,2],[1,2.0])
+        self.assertRaises(ValueError,OptimizationProblem.createItemCollection,None,[1])
+        self.assertRaises(ValueError,OptimizationProblem.createItemCollection,[1,"e"],[1,2])
 
         #normal cases
         weight=[3,4,5,2]
@@ -45,7 +55,6 @@ class TestDynamicProgramming(unittest.TestCase):
             self.assertEqual(items[i].getCost(),weight[i])
             self.assertEqual(items[i].getValue(),value[i])
             self.assertEqual(items[i].getId(),i)
-        dp=OptimizationProblem(items,8)
 
 
     def test_OptimizationProblemClass_Tabulation(self):
@@ -54,10 +63,11 @@ class TestDynamicProgramming(unittest.TestCase):
 
         #normal cases
         self.__tabulationHelp([1,2,3],[10,10,10],6,[0]*8+[10]*6+[0]+[10]*2+[20]*4+[0]+[10,10]+[20]*3+[30])
+        self.__tabulationHelp([1],[100],1,[0,0,0,100])
     
     #tests specific table example
-    def __tabulationHelp(self,weights,values,limit,expected):
-        items=OptimizationProblem.createItemCollection(weights,values)
+    def __tabulationHelp(self,costs,values,limit,expected):
+        items=OptimizationProblem.createItemCollection(costs,values)
         dp=OptimizationProblem(items,limit)
         dp._createTable()
         table=dp.getTable()
@@ -66,7 +76,19 @@ class TestDynamicProgramming(unittest.TestCase):
         
 
     def test_OptimizationProblemClass_SolutionTracing(self):
+        #edge case
         pass
+
+        #normal case
+        self.__solutionTracingHelp([1,2,3],[10,10,10],6,[0,1,2])
+        self.__solutionTracingHelp([1],[100],1,[0])
+        self.__solutionTracingHelp([23,31,29,44,53,38,63,85,89,82],[92,57,49,68,60,43,67,84,87,72],165,[0,1,2,3,5])
+
+    def __solutionTracingHelp(self,costs,values,limit,expected):
+        items=OptimizationProblem.createItemCollection(costs,values)
+        dp=OptimizationProblem(items,limit)
+        dp.solve()
+        self.assertEqual(dp.getSolution(),expected)
 
 if __name__ == '__main__':
     unittest.main()
