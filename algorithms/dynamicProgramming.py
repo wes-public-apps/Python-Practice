@@ -55,10 +55,23 @@ class OptimizationProblem():
 
     #memory optimized tabularization
     def optimizedSolve(self):
-        
         #define a dictionary to store relevant table values so a solution can be reconstructed
         sparseMem={}
 
+        table=self._createOptimizedTable(sparseMem)
+        
+        #construct solution from sparse memory
+        value=table.get(-1,-1)
+        solution=[]
+        while value!=0:
+            itemInd = sparseMem[value]-1
+            solution.append(itemInd)
+            value-=self.__items[itemInd].getValue()
+        solution.reverse()
+
+        return solution
+
+    def _createOptimizedTable(self,sparseMem):
         #define a 2D list that only has two rows 
         #only the previous and current row are needed to determine to perform calculations for dynamic programming
         table = TwoDList(2,self.__limit+1)
@@ -78,18 +91,7 @@ class OptimizationProblem():
                 #add relevant elements to the spares memory structure
                 if table.get(i%2,j)>table.get(i%2,j-1) and table.get(i%2,j)>table.get((i-1)%2,j): 
                     sparseMem[table.get(i%2,j)]=i
-                    maxValue=table.get(i%2,j)
-        
-        #construct solution from sparse memory
-        value=maxValue
-        solution=[]
-        while value!=0:
-            itemInd = sparseMem[value]
-            solution.append(itemInd)
-            value-=self.__items[itemInd].getValue()
-        solution.reverse()
-
-        return solution
+        return table
 
     #solve the dynamic programming problem
     def solve(self):
