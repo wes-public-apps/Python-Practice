@@ -31,32 +31,30 @@ def __quickSort(arr,low,high):
 
     return arr
 
+#sort arrays using merge sort algorithm
 def mergesort(arr):
-    print("{:<5}{:<5}{:<5}{:<5}{:<5}{:<5}".format("L","M","R","i","j","k")+str(arr))
-
     #handle edge cases
     if arr==None: return None
 
     __mergesort(arr,0,len(arr)-1)
     return arr
 
+#private merger sort helper method
 def __mergesort(arr,left,right):
     #handle base case
     if (right-left)<1: return
 
     #normal case
     middle = (left+right)//2
-    print("{:<5}{:<5}{:<5}{:<5}{:<5}{:<5}".format(left,middle,right,"-","-","-")+str(arr))
     __mergesort(arr,left,middle)
     __mergesort(arr,middle+1,right)
-    print("{:<5}{:<5}{:<5}{:<5}{:<5}{:<5}".format(left,middle,right,"-","-","-"),arr[left:middle+1],arr[middle+1:right+1])
     __merge(arr,left,middle,right)
 
+#sort arrays being merged
 def __merge(arr,left,middle,right):
     i=left
     j=middle+1
     k=i
-    print("{:<5}{:<5}{:<5}{:<5}{:<5}{:<5}".format("-","-","-",i,j,k)+str(arr)+" "+str(arr[left:j])+" "+str(arr[j:right+1]))
     while i<j and j<=right:
         if arr[i]<arr[j]:
             i+=1
@@ -66,4 +64,3 @@ def __merge(arr,left,middle,right):
             i+=1
             del arr[j]
         k+=1
-        print("{:<5}{:<5}{:<5}{:<5}{:<5}{:<5}".format("-","-","-",i,j,k)+str(arr)+" "+str(arr[left:j])+" "+str(arr[j:right+1]))
