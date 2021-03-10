@@ -8,7 +8,7 @@
 #Set up the dynamic programming problem
 class OptimizationProblem():
 
-    #Create a collection of items for dynamic programming solutions
+    #Create a collection of items to be the input for the problem
     @staticmethod
     def createItemCollection(costs,values):
         OptimizationProblem.validateInput(costs,values)
@@ -18,7 +18,7 @@ class OptimizationProblem():
             items.append(Item(i,costs[i],values[i]))
         return items
 
-    #Validate input
+    #Validate problem input data
     @staticmethod
     def validateInput(costs,values):
         if type(costs)!=list or type(values)!=list: raise ValueError("Args must be lists")
@@ -55,7 +55,7 @@ class OptimizationProblem():
         for i in range(1,self.__numItems+1):
             for j in range(1,table.getNumCols()):
 
-                #determine element value
+                #determine current element value
                 valueAbove=table.get((i-1)%2,j)
                 valueWithCurrObject=table.get((i-1)%2,j-self.__items[i-1].getCost())+self.__items[i-1].getValue() if j-self.__items[i-1].getCost()>=0 else 0
                 table.replace(i%2,j,max(valueAbove,valueWithCurrObject))

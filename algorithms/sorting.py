@@ -9,7 +9,7 @@ def quicksort(arr):
 
 #private quicksort helper
 def __quickSort(arr,low,high):
-    #handle edge cases
+    #handle edge/base cases
     if(high-low<1): return arr
 
     pivotVal=arr[high]
@@ -31,7 +31,36 @@ def __quickSort(arr,low,high):
 
     return arr
 
-def __swap(arr,ind1,ind2):
-    temp = arr[ind1]
-    arr[ind1]=arr[ind2]
-    arr[ind2]=temp
+#sort arrays using merge sort algorithm
+def mergesort(arr):
+    #handle edge cases
+    if arr==None: return None
+
+    __mergesort(arr,0,len(arr)-1)
+    return arr
+
+#private merger sort helper method
+def __mergesort(arr,left,right):
+    #handle base case
+    if (right-left)<1: return
+
+    #normal case
+    middle = (left+right)//2
+    __mergesort(arr,left,middle)
+    __mergesort(arr,middle+1,right)
+    __merge(arr,left,middle,right)
+
+#sort arrays being merged
+def __merge(arr,left,middle,right):
+    i=left
+    j=middle+1
+    k=i
+    while i<j and j<=right:
+        if arr[i]<arr[j]:
+            i+=1
+        else:
+            arr.insert(k,arr[j])
+            j+=1
+            i+=1
+            del arr[j]
+        k+=1
