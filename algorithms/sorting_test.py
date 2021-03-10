@@ -26,6 +26,7 @@ class TestSorting(unittest.TestCase):
         self.assertEqual(sortFunc([1,2,1]),[1,1,2])
         self.assertEqual(sortFunc([65,39,86]),[39,65,86])
         self.assertEqual(sortFunc([30,75,69,16,47]),[16,30,47,69,75])
+        self.assertEqual(sortFunc([60,80,74,8,77,1,60,33,70,29]),[1,8,29,33,60,60,70,74,77,80])
 
         #normal cases
         for _ in range(20):
